@@ -1,9 +1,10 @@
 const express = require("express"); // import express untuk membuat server
 const { Pool } = require("pg"); // import PostgreSQL client
 require("dotenv").config(); // membaca file .env
-
+const bcrypt = require("bcrypt");
 const app = express(); // inisialisasi express app
-
+const cors = require("cors");
+app.use(cors());
 app.use(express.json()); // agar server bisa menerima JSON dari request
 
 // koneksi ke PostgreSQL menggunakan DATABASE_URL dari .env
@@ -14,12 +15,15 @@ const pool = new Pool({
 
 // endpoint untuk menyimpan data user
 app.post("/users", async (req, res) => {
-  const { nama, noHp, alamat, password } = req.body; // ambil data dari body
+  const { nama, nohp, alamat, password } = req.body; // ambil data dari body
 
   try {
+    //deskripsikan hashedpassword dulu
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const result = await pool.query(
-      "INSERT INTO users (nama, no_hp, alamat, password) VALUES ($1, $2, $3, $4) RETURNING *",
-      [nama, noHp, alamat, password], // data yang dimasukkan
+      "INSERT INTO users (nama, nohp, alamat, password) VALUES ($1, $2, $3, $4) RETURNING *",
+      [nama, nohp, alamat, hashedPassword], // data yang dimasukkan
     );
 
     res.json(result.rows[0]); // kirim data hasil insert
