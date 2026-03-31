@@ -32,6 +32,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { motion } from "framer-motion";
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Lock,
+  UserPlus2,
+  ShieldCheck,
+} from "lucide-react";
 
 // -- Dummy Data Pengguna --
 const usersData = [
@@ -90,30 +100,6 @@ const Header = () => {
             Lihat, tambah, edit, atau hapus data pengguna sistem.
           </p>
         </div>
-
-        <div className="flex items-center gap-4">
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full relative"
-          >
-            <Bell className="w-5 h-5 text-slate-600" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-          </Button>
-          <Separator orientation="vertical" className="h-8" />
-          <div className="flex items-center gap-3">
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>BT</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="text-sm font-semibold text-slate-950">
-                Budi Tjahjono
-              </p>
-              <p className="text-xs text-slate-500">Administrator</p>
-            </div>
-          </div>
-        </div>
       </div>
     </header>
   );
@@ -158,87 +144,131 @@ const TambahUserForm = () => {
   };
   return (
     <form
-      className="grid grid-cols-2 gap-x-6 gap-y-4 pt-4"
+      className="grid grid-cols-2 gap-x-6 gap-y-5 pt-6"
       onSubmit={handleSubmit}
     >
-      <div className="space-y-1.5 col-span-2">
-        <Label htmlFor="nama" className="text-sm text-slate-700">
+      {/* Header Kecil di dalam Form */}
+      <div className="col-span-2 mb-2 flex items-center gap-2 px-1">
+        <div className="p-1.5 bg-emerald-100 rounded-lg">
+          <UserPlus2 className="w-4 h-4 text-emerald-700" />
+        </div>
+        <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+          Informasi Personal
+        </p>
+      </div>
+
+      {/* --- Nama Lengkap --- */}
+      <div className="space-y-2 col-span-2">
+        <Label htmlFor="nama" className="text-slate-600 font-bold ml-1">
           Nama Lengkap
         </Label>
-        <Input
-          id="nama"
-          name="nama" // TAMBAHKAN INI
-          placeholder="Andi Pratama"
-          onChange={handleChange}
-          value={form.nama}
-          className="border-slate-200"
-        />
+        <div className="relative group">
+          <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+          <Input
+            id="nama"
+            name="nama"
+            placeholder="Andi Pratama"
+            onChange={handleChange}
+            value={form.nama}
+            className="h-12 pl-12 rounded-xl bg-slate-50 border-none focus-visible:ring-2 focus-visible:ring-emerald-500 shadow-sm transition-all"
+          />
+        </div>
       </div>
 
-      <div className="space-y-1.5 col-span-2 md:col-span-1">
-        <Label htmlFor="email" className="text-sm text-slate-700">
+      {/* --- Email --- */}
+      <div className="space-y-2 col-span-2 md:col-span-1">
+        <Label htmlFor="email" className="text-slate-600 font-bold ml-1">
           Email
         </Label>
-        <Input
-          id="email"
-          type="email"
-          name="email" // TAMBAHKAN INI
-          placeholder="andi.p@email.com"
-          onChange={handleChange}
-          value={form.email}
-          className="border-slate-200"
-        />
+        <div className="relative group">
+          <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+          <Input
+            id="email"
+            type="email"
+            name="email"
+            placeholder="andi.p@email.com"
+            onChange={handleChange}
+            value={form.email}
+            className="h-12 pl-12 rounded-xl bg-slate-50 border-none focus-visible:ring-2 focus-visible:ring-emerald-500 shadow-sm transition-all"
+          />
+        </div>
       </div>
 
-      <div className="space-y-1.5 col-span-2 md:col-span-1">
-        <Label htmlFor="nohp" className="text-sm text-slate-700">
+      {/* --- Nomor HP --- */}
+      <div className="space-y-2 col-span-2 md:col-span-1">
+        <Label htmlFor="nohp" className="text-slate-600 font-bold ml-1">
           Nomor Handphone
         </Label>
-        <Input
-          id="nohp"
-          placeholder="0812xxxx"
-          name="nohp" // TAMBAHKAN INI
-          className="border-slate-200"
-          onChange={handleChange}
-          value={form.nohp}
-        />
+        <div className="relative group">
+          <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+          <Input
+            id="nohp"
+            name="nohp"
+            placeholder="0812xxxx"
+            onChange={handleChange}
+            value={form.nohp}
+            className="h-12 pl-12 rounded-xl bg-slate-50 border-none focus-visible:ring-2 focus-visible:ring-emerald-500 shadow-sm transition-all"
+          />
+        </div>
       </div>
 
-      <div className="space-y-1.5 col-span-2">
-        <Label htmlFor="alamat" className="text-sm text-slate-700">
-          Alamat
+      {/* --- Alamat --- */}
+      <div className="space-y-2 col-span-2">
+        <Label htmlFor="alamat" className="text-slate-600 font-bold ml-1">
+          Alamat Domisili
         </Label>
-        <Input
-          id="alamat"
-          name="alamat" // TAMBAHKAN INI
-          placeholder="Jl. Merdeka No. 10, Jakarta"
-          className="border-slate-200"
-          onChange={handleChange}
-          value={form.alamat}
-        />
+        <div className="relative group">
+          <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+          <Input
+            id="alamat"
+            name="alamat"
+            placeholder="Jl. Merdeka No. 10, Jakarta"
+            onChange={handleChange}
+            value={form.alamat}
+            className="h-12 pl-12 rounded-xl bg-slate-50 border-none focus-visible:ring-2 focus-visible:ring-emerald-500 shadow-sm transition-all"
+          />
+        </div>
       </div>
 
-      <div className="space-y-1.5 col-span-2">
-        <Label htmlFor="pass" className="text-sm text-slate-700">
-          Password Sementara
-        </Label>
-        <Input
-          id="pass"
-          name="password" // TAMBAHKAN INI
-          type="password"
-          placeholder="******"
-          className="border-slate-200"
-          onChange={handleChange}
-          value={form.password}
-        />
+      {/* --- Password --- */}
+      <div className="space-y-2 col-span-2">
+        <div className="flex justify-between items-center ml-1">
+          <Label htmlFor="pass" className="text-slate-600 font-bold">
+            Password Sementara
+          </Label>
+          <span className="text-[10px] text-slate-400 flex items-center gap-1">
+            <ShieldCheck className="w-3 h-3" /> Auto-encrypted
+          </span>
+        </div>
+        <div className="relative group">
+          <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+          <Input
+            id="pass"
+            name="password"
+            type="password"
+            placeholder="******"
+            onChange={handleChange}
+            value={form.password}
+            className="h-12 pl-12 rounded-xl bg-slate-50 border-none focus-visible:ring-2 focus-visible:ring-emerald-500 shadow-sm transition-all"
+          />
+        </div>
       </div>
 
-      <DialogFooter className="pt-6">
-        <Button variant="outline" className="border-slate-300">
+      {/* --- Footer / Buttons --- */}
+      <DialogFooter className="col-span-2 pt-8 flex gap-3">
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={() => setOpen(false)} // Asumsi menggunakan state open dialog
+          className="rounded-xl h-12 px-6 text-slate-500 hover:bg-slate-100"
+        >
           Batal
         </Button>
-        <Button type="submit" className="bg-slate-900 hover:bg-slate-800 px-8">
-          Simpan
+        <Button
+          type="submit"
+          className="flex-1 md:flex-none h-12 bg-[#0f172a] hover:bg-emerald-700 text-white px-10 rounded-xl font-bold shadow-lg shadow-slate-200 transition-all active:scale-95"
+        >
+          Simpan Data Pengguna
         </Button>
       </DialogFooter>
     </form>

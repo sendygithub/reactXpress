@@ -8,7 +8,6 @@ import {
   PlusCircle,
   Search,
   Pill,
-  Package,
   AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -39,6 +38,26 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
+import {
+  Package,
+  Tag,
+  Layers,
+  Calendar as CalendarIcon,
+  Info,
+  Beaker,
+  Stethoscope,
+  ShieldAlert,
+} from "lucide-react";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 // -- Data Mock Inventaris Farmasi --
 const inventoryData = [
@@ -110,32 +129,149 @@ export default function PharmacyPage() {
                 </DialogDescription>
               </DialogHeader>
               {/* Form Input Profesional */}
-              <div className="grid grid-cols-2 gap-4 py-4">
-                <div className="col-span-2 space-y-1">
-                  <Label>Nama Barang</Label>
-                  <Input placeholder="Contoh: Insulin Glargine" />
+              <div className="bg-white p-8 rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-50 max-w-2xl mx-auto">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="p-3 bg-emerald-50 rounded-2xl text-emerald-600">
+                    <Package className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-[#0f172a]">
+                      Input Inventaris Baru
+                    </h3>
+                    <p className="text-sm text-slate-400 font-light">
+                      Pastikan data batch dan kedaluwarsa sesuai fisik barang.
+                    </p>
+                  </div>
                 </div>
-                <div className="space-y-1">
-                  <Label>Kategori</Label>
-                  <Input placeholder="Obat Keras / Bebas / Alkes" />
-                </div>
-                <div className="space-y-1">
-                  <Label>Kode Batch / SKU</Label>
-                  <Input placeholder="BCH-12345" />
-                </div>
-                <div className="space-y-1">
-                  <Label>Jumlah Stok Awal</Label>
-                  <Input type="number" placeholder="0" />
-                </div>
-                <div className="space-y-1">
-                  <Label>Satuan</Label>
-                  <Input placeholder="Botol / Tablet / Pcs" />
-                </div>
-                <div className="col-span-2 space-y-1">
-                  <Label>Tanggal Kedaluwarsa (Expired)</Label>
-                  <Input type="date" />
+
+                <div className="grid grid-cols-2 gap-8">
+                  {/* --- Nama Barang --- */}
+                  <div className="col-span-2 space-y-3">
+                    <Label className="text-slate-600 font-bold ml-1">
+                      Nama Barang / Obat
+                    </Label>
+                    <div className="relative group">
+                      <Beaker className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+                      <Input
+                        placeholder="Contoh: Insulin Glargine"
+                        className="pl-12 h-14 rounded-2xl bg-slate-50 border-none focus-visible:ring-2 focus-visible:ring-emerald-500 transition-all shadow-sm"
+                      />
+                    </div>
+                  </div>
+
+                  {/* --- Kategori: Menggunakan Radio Group with Style --- */}
+                  <div className="col-span-2 space-y-4">
+                    <Label className="text-slate-600 font-bold ml-1">
+                      Kategori Barang
+                    </Label>
+                    <RadioGroup
+                      defaultValue="obat-keras"
+                      className="grid grid-cols-3 gap-4"
+                    >
+                      {[
+                        {
+                          id: "obat-keras",
+                          label: "Obat Keras",
+                          icon: <ShieldAlert className="w-4 h-4" />,
+                        },
+                        {
+                          id: "obat-bebas",
+                          label: "Obat Bebas",
+                          icon: <Tag className="w-4 h-4" />,
+                        },
+                        {
+                          id: "alkes",
+                          label: "Alkes",
+                          icon: <Stethoscope className="w-4 h-4" />,
+                        },
+                      ].map((item) => (
+                        <Label
+                          key={item.id}
+                          htmlFor={item.id}
+                          className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 border-slate-50 bg-slate-50/50 cursor-pointer hover:bg-white hover:border-emerald-100 transition-all [&:has([data-state=checked])]:border-emerald-500 [&:has([data-state=checked])]:bg-emerald-50/50"
+                        >
+                          <RadioGroupItem
+                            value={item.id}
+                            id={item.id}
+                            className="sr-only"
+                          />
+                          <div className="text-emerald-600">{item.icon}</div>
+                          <span className="text-xs font-bold text-slate-600">
+                            {item.label}
+                          </span>
+                        </Label>
+                      ))}
+                    </RadioGroup>
+                  </div>
+
+                  {/* --- SKU & Stok --- */}
+                  <div className="space-y-3">
+                    <Label className="text-slate-600 font-bold ml-1 text-sm">
+                      Kode SKU / Batch
+                    </Label>
+                    <Input
+                      placeholder="BCH-12345"
+                      className="h-12 rounded-xl bg-slate-50 border-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                    />
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label className="text-slate-600 font-bold ml-1 text-sm">
+                      Stok Awal
+                    </Label>
+                    <div className="relative">
+                      <Layers className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        className="pl-12 h-12 rounded-xl bg-slate-50 border-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                      />
+                    </div>
+                  </div>
+
+                  {/* --- Satuan: Menggunakan Select --- */}
+                  <div className="space-y-3">
+                    <Label className="text-slate-600 font-bold ml-1 text-sm">
+                      Satuan
+                    </Label>
+                    <Select>
+                      <SelectTrigger className="h-12 rounded-xl bg-slate-50 border-none focus:ring-2 focus:ring-emerald-500">
+                        <SelectValue placeholder="Pilih Satuan" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl border-slate-100 shadow-xl">
+                        <SelectItem value="botol">Botol</SelectItem>
+                        <SelectItem value="tablet">Tablet / Strip</SelectItem>
+                        <SelectItem value="pcs">Pcs / Unit</SelectItem>
+                        <SelectItem value="box">Box / Dus</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* --- Expired Date --- */}
+                  <div className="space-y-3">
+                    <Label className="text-slate-600 font-bold ml-1 text-sm">
+                      Tanggal Expired
+                    </Label>
+                    <div className="relative">
+                      <CalendarIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <Input
+                        type="date"
+                        className="pl-12 h-12 rounded-xl bg-slate-50 border-none focus-visible:ring-2 focus-visible:ring-emerald-500 text-slate-600"
+                      />
+                    </div>
+                  </div>
+
+                  {/* --- Information Note --- */}
+                  <div className="col-span-2 p-4 bg-blue-50/50 rounded-2xl flex gap-3 border border-blue-100">
+                    <Info className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+                    <p className="text-[11px] text-blue-600 leading-relaxed font-medium">
+                      Sistem akan otomatis memberikan notifikasi 6 bulan sebelum
+                      tanggal kedaluwarsa tiba untuk produk obat-obatan keras.
+                    </p>
+                  </div>
                 </div>
               </div>
+
               <DialogFooter>
                 <Button className="bg-slate-900 w-full">
                   Simpan ke Gudang
